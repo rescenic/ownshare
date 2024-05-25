@@ -1,0 +1,64 @@
+<script>
+    import { goto } from '$app/navigation';
+	import { onMount } from "svelte";
+    import { getOption, setOption } from "$lib/api.js";
+
+    let pageError = "";
+
+    let options = {
+        files_upload_folder_location: "",
+        files_default_save_time: "",
+        files_id_length: "",
+        files_upload_chunk_size: "",
+    }
+
+    async function fetchOptions() {
+        for(let option in options) {
+            options[option] = await getOption(option);
+        }
+    }
+
+    async function saveOptions() {
+        for(let option in options) {
+            await setOption(option, options[option]);
+        }
+
+        console.log("Options Saved");
+        fetchOptions();
+    }
+
+    onMount(() => {
+        fetchOptions();
+    })
+
+</script>
+
+<h1 class="text-4xl font-bold">Settings</h1>
+
+<span class="mb-4 text-red-500">{pageError}</span>
+
+<!-- <h2 class="text-2xl font-bold">General Settings</h2> -->
+
+<h2 class="text-2xl font-bold">File Settings</h2>
+
+<label class="form-control w-full">
+    <div class="label"><span class="label-text">Upload Folder Location</span></div>
+    <input type="text" class="input input-bordered w-full max-w-lg" bind:value={options.files_upload_folder_location}/>
+</label>
+
+<label class="form-control w-full">
+    <div class="label"><span class="label-text">Default save time</span></div>
+    <input type="text" class="input input-bordered w-full max-w-lg" bind:value={options.files_default_save_time}/>
+</label>
+
+<label class="form-control w-full">
+    <div class="label"><span class="label-text">Id length</span></div>
+    <input type="text" class="input input-bordered w-full max-w-lg" bind:value={options.files_id_length}/>
+</label>
+
+<label class="form-control w-full">
+    <div class="label"><span class="label-text">Upload Chunk Size</span></div>
+    <input type="text" class="input input-bordered w-full max-w-lg" bind:value={options.files_upload_chunk_size}/>
+</label>
+
+<button class="btn btn-priary mt-8" on:click={saveOptions}>Save</button>
