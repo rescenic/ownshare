@@ -1,14 +1,6 @@
 <?php 
 include_once("../functions.php");
 
-<<<<<<< HEAD
-=======
-header("Access-Control-Allow-Origin: " . APP_CORS_URLS);
-header("Access-Control-Allow-Headers: " . APP_CORS_URLS);
-header("Access-Control-Allow-Credentials: true");
-
-
->>>>>>> origin/main
 if($_SERVER['REQUEST_METHOD'] != "POST") {
     echo '{"error": "wrong request method! expeted POST"}';
     exit();
