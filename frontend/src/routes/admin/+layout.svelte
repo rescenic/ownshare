@@ -34,10 +34,7 @@
                     <a href="/admin/files" class="w-full"><img src="/icons/file.svg" alt="">Files</a>
                 </li>
                 <li>
-                    <a href="/admin"><img src="/icons/stats.svg" alt="">Stats</a>
-                </li>
-                <li>
-                    <a href="/admin/"><img src="/icons/users.svg" alt="">Users</a>
+                    <a href="/admin/users"><img src="/icons/users.svg" alt="">Users</a>
                 </li>
                 <li>
                     <a href="/admin/settings"><img src="/icons/settings.svg" alt="">Settings</a>

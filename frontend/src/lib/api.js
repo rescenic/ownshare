@@ -88,3 +88,23 @@ export async function deleteFileCollections(id) {
     let result = await response.json();
     return result;
 }
+
+export async function fetchUsers(f) {
+    let url = PUBLIC_BACKEND_ADDRESS + "/admin/getUsers.php";
+    let body = {
+        method: "GET",
+        credentials: "include"
+    }
+
+    let result = null;
+
+    if(f) {
+        result = await f(url, body);
+    } else {
+       result = await fetch(url, body);
+    }
+
+
+    let users = await result.json();
+    return users;
+}

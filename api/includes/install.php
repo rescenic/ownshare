@@ -17,6 +17,18 @@
 
         if ($stmt->execute()) {} else { echo '{"error": "' . $stmt->error . "'}"; exit(); } 
 
+        //User Permissions
+
+        $stmt = $mysqli->prepare("
+            CREATE TABLE IF NOT EXISTS `user_permissions` ( 
+                `permission` varchar(50) NOT NULL, 
+                `user_id` int(11) NOT NULL,
+                `issuer` int(11) NOT NULL
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;    
+        "); 
+
+        if ($stmt->execute()) {} else { echo '{"error": "' . $stmt->error . "'}"; exit(); } 
+
         //Sessions
         $stmt = $mysqli->prepare("
             CREATE TABLE IF NOT EXISTS `sessions` ( 
@@ -50,6 +62,7 @@
                 `id` int(11) NOT NULL AUTO_INCREMENT, 
                 `collection_id` varchar(255) NOT NULL,
                 `title` varchar(255) NOT NULL,
+                `totalSize` int NOT NULL DEFAULT 0,
                 `comment` varchar(255) NOT NULL,
                 `path` varchar(255) NOT NULL,
                 `password` varchar(255) NOT NULL,

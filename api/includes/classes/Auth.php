@@ -87,5 +87,13 @@
             }
         }
 
+        public function hasPermission($id, $perm) {
+
+        }
+
+        public function setPermission($id, $perm) {
+            
+        }
+
     }
 ?>

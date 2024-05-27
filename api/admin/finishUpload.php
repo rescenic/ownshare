@@ -44,6 +44,7 @@ if($collection == null) {
 $zipFilePath = ROOT_DIR . $collection['path'] . '/' . $collectionId . '.zip';
 
 $zip = new ZipArchive();
+$totalSize = 0;
 
 if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== TRUE) {
     echo '{"error": "cannot create zip file"}';
@@ -59,7 +60,12 @@ foreach ($collection['files'] as $file) {
         $zip->close();
         exit();
     }
+    $totalSize += $file["size"];
 }
+
+$stmt = $db->prepare("UPDATE file_collections SET totalSize = ? WHERE id = ?");
+$stmt->bind_param("ss", $totalSize, $collection["id"]);
+$stmt->execute();
 
 $zip->close();
 

@@ -31,13 +31,13 @@
 <!-- File List -->
 
 <div class="flex justify-between items-center mb-4"> 
-    <h1 class="text-4xl font-bold">Files</h1>
+    <h1 class="text-4xl font-bold">File Collections</h1>
 
     <div>
         <button class="btn btn-accent btn-sm" on:click={() => {showUploadModal = true}}>Upload</button>
     </div>
 </div>
-
+<!-- 
 <ul class="files-grid w-full">
     {#each data.fileCollections as collection, i }
         <li class="card bg-base-100 shadow-xl">
@@ -98,7 +98,54 @@
             </div>
         </li>
     {/each}
-</ul>
+</ul> -->
+
+<div>
+    <div class="overflow-x-auto w-full">
+        <table class="table">
+          <!-- head -->
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Total Size</th>
+              <th>Downloads</th>
+              <th>Uploaded by</th>
+              <th>Uploaded at</th>
+              <th>Expiry Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {#each data.fileCollections as collection, i}
+                <tr class="bg-base-200">
+                    <td>{collection.title}</td>
+                    <td>{formatBytes(collection.totalSize)}</td>
+                    <td>{collection.downloads}/{collection.max_downloads}</td>
+                    <td>{collection.uploaded_by.username}</td>
+                    <td>{formatDate(collection.uploaded_at)}</td>
+                    <td>{formatDate(collection.save_until)}</td>
+                    <td class="flex flex-nowrap gap-1">
+                        <a class="btn btn-secondary btn-sm p-0 aspect-square" href="/{collection.collection_id}">
+                            <img src="/icons/link.svg" alt="">   
+                        </a>
+                        <!-- <button class="btn btn-secondary btn-sm p-0 aspect-square">
+                            <img src="/icons/edit.svg" alt="">   
+                        </button> -->
+                        <button class="btn btn-error btn-sm p-0 aspect-square" on:click={() => {
+                                deleteFileCollections(collection.collection_id);
+                                invalidateAll();
+                            }}>
+                            <img src="/icons/delete.svg" alt="">   
+                        </button>
+                    </td>
+                </tr>
+                <br>
+            {/each}
+          </tbody>
+        </table>
+    </div>
+</div>
 
 <style>
     .files-grid {

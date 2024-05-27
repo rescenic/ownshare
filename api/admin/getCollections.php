@@ -39,14 +39,9 @@ for($i = 0; $i < count($collections); $i++) {
     $result = $stmt->get_result();
     $files = $result->fetch_all(MYSQLI_ASSOC);
 
-    foreach($files as $file) {
-        $totalSize += $file["size"];
-    }
-
     $user = $auth->getUserById($collections[$i]["uploaded_by"]);
 
     $collections[$i]["files"] = $files;
-    $collections[$i]["totalSize"] = $totalSize;
     $collections[$i]["uploaded_by"] = $user;
 }
 
