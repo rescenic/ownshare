@@ -26,7 +26,7 @@
     }
 
     async function startUpload() {
-        chunkSize = parseInt(await getOption("files_upload_chunk_size"));
+        chunkSize = parseInt(await getOption("files_upload_chunk_size") * 8);
         
         for(let i = 0; i < files.length; i++) {
             files[i].neededChunks = Math.ceil(files[i].size / chunkSize);
@@ -54,7 +54,7 @@
         fd.set("max_downloads", maxDownloads);
         fd.set("save_duration", saveDuration);
 
-        let response = await fetch(PUBLIC_BACKEND_ADDRESS + "/admin/upload.php", {
+        let response = await fetch(PUBLIC_BACKEND_ADDRESS + "/admin/files/upload.php", {
             method: "POST",
             credentials: "include",
             body: fd
@@ -74,7 +74,7 @@
             fd.set('collection', sessionId);
             fd.set('size', file.size);
 
-            let response = await fetch(PUBLIC_BACKEND_ADDRESS + "/admin/uploadChunk.php", {
+            let response = await fetch(PUBLIC_BACKEND_ADDRESS + "/admin/files/uploadChunk.php", {
                 method: "POST",
                 credentials: "include",
                 body: fd
@@ -91,7 +91,7 @@
         let fd = new FormData();
         fd.set("collection_id", sessionId);
 
-        let response = await fetch(PUBLIC_BACKEND_ADDRESS + "/admin/finishUpload.php", {
+        let response = await fetch(PUBLIC_BACKEND_ADDRESS + "/admin/files/finishUpload.php", {
             method: "POST",
             credentials: "include",
             body: fd

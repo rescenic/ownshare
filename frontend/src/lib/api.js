@@ -1,7 +1,7 @@
 import { PUBLIC_BACKEND_ADDRESS } from "$env/static/public"
 
 export async function getOption(option) {
-    let response = await fetch(PUBLIC_BACKEND_ADDRESS + "/admin/getOption.php/?option=" + option, {
+    let response = await fetch(PUBLIC_BACKEND_ADDRESS + "/admin/options/getOption.php/?option=" + option, {
         method: "GET",
         credentials: "include",
     });
@@ -17,7 +17,7 @@ export async function getOption(option) {
 }
 
 export async function setOption(name, value) {
-    let response = await fetch(PUBLIC_BACKEND_ADDRESS + "/admin/setOption.php", {
+    let response = await fetch(PUBLIC_BACKEND_ADDRESS + "/admin/options/setOption.php", {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({
@@ -56,7 +56,7 @@ export async function fetchFileCollection(id, f) {
 }
 
 export async function fetchFileCollections(f) {
-    let url = PUBLIC_BACKEND_ADDRESS + "/admin/getCollections.php";
+    let url = PUBLIC_BACKEND_ADDRESS + "/admin/files/getCollections.php";
     let body = {
         method: "GET",
         credentials: "include"
@@ -79,7 +79,7 @@ export async function deleteFileCollections(id) {
     let fd = new FormData();
     fd.set("collection_id", id);
 
-    let response = await fetch(PUBLIC_BACKEND_ADDRESS + "/admin/deleteCollection.php", {
+    let response = await fetch(PUBLIC_BACKEND_ADDRESS + "/admin/files/deleteCollection.php", {
         method: "POST",
         credentials: "include",
         body: fd
@@ -90,7 +90,7 @@ export async function deleteFileCollections(id) {
 }
 
 export async function fetchUsers(f) {
-    let url = PUBLIC_BACKEND_ADDRESS + "/admin/getUsers.php";
+    let url = PUBLIC_BACKEND_ADDRESS + "/admin/users/getUsers.php";
     let body = {
         method: "GET",
         credentials: "include"

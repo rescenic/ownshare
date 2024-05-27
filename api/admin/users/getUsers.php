@@ -1,5 +1,5 @@
 <?php 
-include_once("../functions.php");
+include_once("../../functions.php");
 
 if($_SERVER['REQUEST_METHOD'] != "GET") {
     echo '{"error": "wrong request method! expeted GET"}';
@@ -20,19 +20,16 @@ if($user == null) {
     exit();
 }
 
-$optionName = $_GET["option"];
-
 if($user["role"] != "admin") {
     echo '{"error": "Unautorized User!"}';
     exit();
 }
 
-if(!isset($optionName) || $optionName == "") {
-    echo '{"error": "option ist not set"}';
-    exit();
-}
+$stmt = $db->prepare("SELECT * from users ORDER BY id ASC");
+$stmt->execute();
+$users = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
-$optionValue = $options->GetOption($optionName);
+$json_users = json_encode($users);
+echo $json_users;
 
-echo '{"value": "' . $optionValue . '"}';
 exit();

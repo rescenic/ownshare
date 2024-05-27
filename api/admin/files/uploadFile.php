@@ -1,5 +1,5 @@
 <?php 
-include_once("../functions.php");
+include_once("../../functions.php");
 
 header("Access-Control-Allow-Origin: " . APP_CORS_URLS);
 header("Access-Control-Allow-Headers: " . APP_CORS_URLS);
