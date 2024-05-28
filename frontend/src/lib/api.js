@@ -56,19 +56,12 @@ export async function fetchFileCollection(id, f) {
 }
 
 export async function fetchFileCollections(f) {
-    let url = PUBLIC_BACKEND_ADDRESS + "/admin/files/getCollections.php";
     let body = {
         method: "GET",
         credentials: "include"
     }
 
-    let result = null;
-
-    if(f) {
-        result = await f(url, body);
-    } else {
-       result = await fetch(url, body);
-    }
+    let result = await fetch(PUBLIC_BACKEND_ADDRESS + "/admin/files/getCollections.php", body);
 
 
     let collections = await result.json();
@@ -89,22 +82,45 @@ export async function deleteFileCollections(id) {
     return result;
 }
 
-export async function fetchUsers(f) {
-    let url = PUBLIC_BACKEND_ADDRESS + "/admin/users/getUsers.php";
-    let body = {
+export async function fetchUsers() {
+    let result = await fetch(PUBLIC_BACKEND_ADDRESS + "/admin/users/getUsers.php", {
         method: "GET",
         credentials: "include"
-    }
-
-    let result = null;
-
-    if(f) {
-        result = await f(url, body);
-    } else {
-       result = await fetch(url, body);
-    }
-
+    });
 
     let users = await result.json();
     return users;
 }
+
+export async function createUser(username, email, password, role) {
+    let fd = new FormData();
+    fd.set("username", username);
+    fd.set("email", email);
+    fd.set("password", password);
+    fd.set("role", role);
+
+    let response = await fetch(PUBLIC_BACKEND_ADDRESS + "/admin/users/createUser.php", {
+        method: "POST",
+        credentials: "include",
+        body: fd
+    });
+
+    let result = await response.text();
+    console.log(result);
+    return JSON.parse(result);
+} 
+
+export async function deleteUser(id) {
+    let fd = new FormData();
+    fd.set("user_id", id);
+
+    let response = await fetch(PUBLIC_BACKEND_ADDRESS + "/admin/users/deleteUser.php", {
+        method: "POST",
+        credentials: "include",
+        body: fd
+    });
+
+    let result = await response.text();
+    console.log(result);
+    return JSON.parse(result);
+} 

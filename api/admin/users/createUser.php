@@ -26,19 +26,23 @@ if($user["role"] != "admin") {
     exit();
 }
 
-
-$json = file_get_contents('php://input');
-$body = json_decode($json);
-
-if(!isset($body->optionName) || !isset($body->optionValue)) {
-    echo '{"error": "all fields must be set!"}';
+if(!isset($_POST["username"]) || !isset($_POST["email"]) || !isset($_POST["password"]) || !isset($_POST["role"])) {
+    echo '{"error": "All fields must be filled!"}';
     exit();
 }
 
-$optionName = $body->optionName;
-$optionValue = $body->optionValue;
+$username = $_POST["username"];
+$email = $_POST["email"];
+$password = $_POST["password"];
+$role = $_POST["role"];
 
-$options->setOption($optionName, $optionValue);
-echo '{"message": "option set successfully!"}';
+if($username == "" || $email == "" || $password == "" || $role == "") {
+    echo '{"error": "All fields must be filled!"}';
+    exit();
+}
+
+$auth->createUser($username, $email, $password, $role);
+
+echo '{"message": "created user"}';
 
 exit();

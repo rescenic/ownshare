@@ -21,7 +21,7 @@
 
     onMount(() => {
         validateSession();
-    })
+    });
 </script>
 
 <div class="flex h-screen">

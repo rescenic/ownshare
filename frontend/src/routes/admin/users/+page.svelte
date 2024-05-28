@@ -1,18 +1,23 @@
 <script>
     import { goto } from '$app/navigation';
 	import { onMount } from "svelte";
-    import { getOption, setOption } from "$lib/api.js";
+    import { deleteUser, fetchUsers } from "$lib/api.js";
     import CreateUserModal from "../../../lib/components/CreateUserModal.svelte";
 
+
+    $: users = [];
 
     let pageError = "";
     let showCreateUserModal = false;
 
-    export let data;
+
+    onMount(async () => {
+        users = await fetchUsers();
+    });
 
 </script>
 
-<CreateUserModal bind:showModal={showCreateUserModal}></CreateUserModal>
+<CreateUserModal bind:showModal={showCreateUserModal} on:created={async () => { users = await fetchUsers() }}></CreateUserModal>
 
 <div class="flex justify-between items-center mb-4"> 
     <h1 class="text-4xl font-bold">Users</h1>
@@ -26,38 +31,39 @@
 
 <div class="overflow-x-auto w-full">
     <table class="table">
-      <!-- head -->
-      <thead>
-        <tr>
-          <th>Id</th>
-          <th>Username</th>
-          <th>E-Mail</th>
-          <th>Role</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        {#each data.users as user, i}
-            <tr class="bg-base-200">
-                <td>{user.id}</td>
-                <td>{user.username}</td>
-                <td>{user.email}</td>
-                <td>{user.role}</td>
-                <td>
-                    <button class="btn btn-secondary btn-sm p-0 aspect-square">
-                        <img src="/icons/edit.svg" alt="">   
-                    </button>
-                    <!-- <button class="btn btn-error btn-sm p-0 aspect-square" on:click={() => {
-                            deleteFileCollections(collection.collection_id);
-                            invalidateAll();
-                        }}>
-                        <img src="/icons/delete.svg" alt="">   
-                    </button> -->
-                </td>
+        <thead>
+            <tr>
+            <th>Id</th>
+            <th>Username</th>
+            <th>E-Mail</th>
+            <th>Role</th>
+            <th>Actions</th>
             </tr>
-            <br>
-        {/each}
-      </tbody>
+        </thead>
+
+        <tbody>
+            {#if users != null && users.length > 0}
+                {#each users as user, i}
+                    <tr class="bg-base-200">
+                        <td>{user.id}</td>
+                        <td>{user.username}</td>
+                        <td>{user.email}</td>
+                        <td>{user.role}</td>
+                        <td>
+                            <!-- <button class="btn btn-secondary btn-sm p-0 aspect-square">
+                                <img src="/icons/edit.svg" alt="">   
+                            </button> -->
+                            <button class="btn btn-error btn-sm p-0 aspect-square" on:click={async () => {
+                                    deleteUser(user.id);
+                                    users = await fetchUsers();
+                                }}>
+                                <img src="/icons/delete.svg" alt="">   
+                            </button>
+                        </td>
+                    </tr>
+                    <br>
+                {/each}
+            {/if}
+        </tbody>
     </table>
 </div>

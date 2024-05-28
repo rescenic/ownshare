@@ -7,11 +7,11 @@
             $this->conn = $conn;
         }
 
-        public function createUser($username, $email, $password) {
+        public function createUser($username, $email, $password, $role) {
             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
-            $stmt = $this->conn->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
-            $stmt->bind_param("sss", $username, $email, $passwordHash);
+            $stmt = $this->conn->prepare("INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param("ssss", $username, $email, $passwordHash, $role);
             $stmt->execute();
         }
 
@@ -92,7 +92,7 @@
         }
 
         public function setPermission($id, $perm) {
-            
+
         }
 
     }

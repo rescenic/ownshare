@@ -3,7 +3,9 @@
 
     import { PUBLIC_BACKEND_ADDRESS } from "$env/static/public"
     import { getOption, setOption } from "$lib/api.js";
-    import { invalidateAll } from '$app/navigation';
+    import { createEventDispatcher } from 'svelte';
+
+    const dispatch = createEventDispatcher();
 
     let files = [];
     let error = "";
@@ -104,7 +106,7 @@
         // }
 
         console.log("upload finished!");
-        invalidateAll();
+        dispatch("uploadFinished", {});
     }
 
     function truncate(str, n){
@@ -130,8 +132,18 @@
         files = files.filter((_, i) => i !== index);
     }
 
+    function reset() {
+        files = [];
+        title = "";
+        comment = "";
+        password = "";
+        maxDownloads = "";
+        saveDuration = "";
+        uploadingView = false;        
+    }
 
-    export let showUploadModal = true;
+
+    export let showUploadModal = false;
 </script>
 
 <Modal bind:showModal={showUploadModal}>

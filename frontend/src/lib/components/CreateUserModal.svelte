@@ -2,42 +2,59 @@
     import Modal from "./Modal.svelte";
 
     import { PUBLIC_BACKEND_ADDRESS } from "$env/static/public"
-    import { getOption, setOption } from "$lib/api.js";
+    import { createUser } from "$lib/api.js";
     import { invalidateAll } from '$app/navigation';
+    import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
 
     let error = "";
 
+    let username = "";
+    let email = "";
+    let password = "";
+    let passwordRepeat = "";
+    let role = "manager";
 
+    async function handleLogin() {
 
-    function truncate(str, n){
-        var split = str.split('.');
-        var filename = split[0];
-        var extension = split[1];
-        if (filename.length > n) {
-            filename = filename.substring(0, n);
+        if(username == "" || email == "" || password == "" || passwordRepeat == "") {
+            error = "All fields must be filled!";
+            return;
         }
-        var result = filename + '...' + extension;
-        return result;
-    };
+
+        if(password != passwordRepeat) {
+            error = "Password Repeat is wrong!";
+            return;
+        }
+
+        let response = await createUser(username, email, password, role);
+
+        if(response.error) {
+            error = response.error;
+        } else {
+            dispatch("created", {});
+        }
+
+    }
 
     export let showModal = true;
 </script>
 
 <Modal bind:showModal={showModal}>
-    <h2 class="text-2xl font-bold mb-4">Create User</h2>
+    <h2 class="text-2xl font-bold">Create User</h2>
 
-    <span class="text-red-300">{error}</span>
+    <span class="text-red-400">{error}</span>
 
-    <div class="flex flex-col gap-3 w-72">
-        <input type="text" placeholder="Username" class="input input-bordered w-full" />
-        <input type="email" placeholder="E-Mail" class="input input-bordered w-full" />
-        <input type="password" placeholder="Password" class="input input-bordered w-full" />
-        <input type="password" placeholder="Repeat Password" class="input input-bordered w-full" />
-        <select class="select select-bordered w-full max-w-xs">
-            <option disabled selected>Role</option>
-            <option>Admin</option>
-            <option>Manager</option>
+    <div class="flex flex-col gap-3 w-72 mt-4">
+        <input type="text" placeholder="Username" class="input input-bordered w-full" bind:value={username}/>
+        <input type="email" placeholder="E-Mail" class="input input-bordered w-full" bind:value={email}/>
+        <input type="password" placeholder="Password" class="input input-bordered w-full" bind:value={password}/>
+        <input type="password" placeholder="Repeat Password" class="input input-bordered w-full" bind:value={passwordRepeat}/>
+        <select class="select select-bordered w-full max-w-xs" bind:value={role}>
+            <option value="admin">Admin</option>
+            <option value="manager">Manager</option>
         </select>
-        <button class="btn btn-primary">Create User</button>
+        <button class="btn btn-primary" on:click={handleLogin}>Create User</button>
     </div>
 </Modal>

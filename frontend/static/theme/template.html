@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <main>
+        <div class="download-card">
+            <h1>{{ collection.title }}</h1>
+
+            {{#each collection.files }}
+                <a class="file" href="{{url}}">
+                    <section>
+                        <span class="index">{{index}}</span>
+                        <span class="filename">{{name}}</span>
+                    </section>
+
+                    <section>
+                        <span class="filesize">{{formatedSize}}</span>
+                        <span class="download-icon">
+                            <img src="/theme/icon.svg" alt="">
+                        </span>
+                    </section>  
+                </a>
+
+                <hr>
+            {{/each}}
+
+            <a class="button" href="{{collection.zipUrl}}">Download all</a>
+        </div>
+    </main>
+</body>
+</html>

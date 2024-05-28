@@ -20,7 +20,7 @@ if($user == null) {
     exit();
 }
 
-if($user["role"] != "admin") {
+if($user["role"] != "admin" && $user["role"] != "manager") {
     echo '{"error": "Unautorized User!"}';
     exit();
 }

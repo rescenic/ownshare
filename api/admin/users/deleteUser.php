@@ -20,20 +20,17 @@ if($user == null) {
     exit();
 }
 
-if($user["role"] != "admin" && $user["role"] != "manager") {
+if($user["role"] != "admin") {
     echo '{"error": "Unautorized User!"}';
     exit();
 }
 
-$collectionId = $_POST["collection_id"];
+$userId = $_POST["user_id"];
 
-$stmt = $db->prepare("DELETE FROM file_collections WHERE collection_id = ?");
-$stmt->bind_param("s", $collectionId);
+$stmt = $db->prepare("DELETE FROM users WHERE id = ?");
+$stmt->bind_param("s", $userId);
 $stmt->execute();
 
-$stmt = $db->prepare("DELETE FROM file_registry WHERE collection_id = ?");
-$stmt->bind_param("s", $collectionId);
-$stmt->execute();
 
-echo '{"message": "collection deleted successfully!"}';
+echo '{"message": "user deleted successfully!"}';
 exit();

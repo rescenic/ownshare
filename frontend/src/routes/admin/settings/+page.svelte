@@ -39,6 +39,8 @@
 
 <!-- <h2 class="text-2xl font-bold">General Settings</h2> -->
 
+<br>
+
 <h2 class="text-2xl font-bold">File Settings</h2>
 
 <label class="form-control w-full">
