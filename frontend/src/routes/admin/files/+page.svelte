@@ -1,9 +1,9 @@
 <script>
 	import { onMount } from "svelte";
     import FileUploadModal from "../../../lib/components/FileUploadModal.svelte";
-    import { PUBLIC_BACKEND_ADDRESS } from "$env/static/public";
-    import { invalidateAll } from '$app/navigation';
     import { fetchFileCollections, fetchFileCollection, deleteFileCollections } from "$lib/api.js";
+    import { backendAddress } from "$lib/config.js";
+    import { base } from '$app/paths'
 
     $: fileCollections = [];
     
@@ -23,14 +23,14 @@
     }
 
     onMount(async () => {
-        fileCollections = await fetchFileCollections(fetch);
+        fileCollections = await fetchFileCollections();
     });
 
 </script>
 
 <!-- Upload File Modal -->
 
-<FileUploadModal bind:showUploadModal on:uploadFinished={async () => {fileCollections = await fetchFileCollections(fetch);}}></FileUploadModal>
+<FileUploadModal bind:showUploadModal on:uploadFinished={async () => {fileCollections = await fetchFileCollections($backendAddress);}}></FileUploadModal>
 
 <!-- File List -->
 
@@ -64,21 +64,25 @@
                     <td>{collection.title}</td>
                     <td>{formatBytes(collection.totalSize)}</td>
                     <td>{collection.downloads}/{collection.max_downloads}</td>
-                    <td>{collection.uploaded_by.username}</td>
+                    <td>
+                        {#if collection.uploaded_by != null}
+                            {collection.uploaded_by.username}
+                        {/if}
+                    </td>
                     <td>{formatDate(collection.uploaded_at)}</td>
                     <td>{formatDate(collection.save_until)}</td>
                     <td class="flex flex-nowrap gap-1">
-                        <a class="btn btn-secondary btn-sm p-0 aspect-square" href="/?q={collection.collection_id}">
-                            <img src="/icons/link.svg" alt="">   
+                        <a class="btn btn-secondary btn-sm p-0 aspect-square" href="{base}/?q={collection.collection_id}">
+                            <img src="{base}/icons/link.svg" alt="">   
                         </a>
                         <!-- <button class="btn btn-secondary btn-sm p-0 aspect-square">
                             <img src="/icons/edit.svg" alt="">   
                         </button> -->
                         <button class="btn btn-error btn-sm p-0 aspect-square" on:click={async () => {
-                                deleteFileCollections(collection.collection_id);
-                                fileCollections = await fetchFileCollections(fetch);
+                                deleteFileCollections(collection.collection_id, $backendAddress);
+                                fileCollections = await fetchFileCollections($backendAddress);
                             }}>
-                            <img src="/icons/delete.svg" alt="">   
+                            <img src="{base}/icons/delete.svg" alt="">   
                         </button>
                     </td>
                 </tr>

@@ -1,7 +1,16 @@
-import { PUBLIC_BACKEND_ADDRESS } from "$env/static/public"
+import { base } from '$app/paths'
+
+export async function getConfig() {
+    let response = await fetch(base + "/config.json");
+    let result = await response.json();
+    return result;
+}
 
 export async function getOption(option) {
-    let response = await fetch(PUBLIC_BACKEND_ADDRESS + "/admin/options/getOption.php/?option=" + option, {
+    const cfg = await getConfig();
+    const backendAddress = cfg.backendAddress;
+
+    let response = await fetch(backendAddress + "/admin/options/getOption.php/?option=" + option, {
         method: "GET",
         credentials: "include",
     });
@@ -17,7 +26,10 @@ export async function getOption(option) {
 }
 
 export async function setOption(name, value) {
-    let response = await fetch(PUBLIC_BACKEND_ADDRESS + "/admin/options/setOption.php", {
+    const cfg = await getConfig();
+    const backendAddress = cfg.backendAddress;
+
+    let response = await fetch(backendAddress + "/admin/options/setOption.php", {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({
@@ -35,44 +47,40 @@ export async function setOption(name, value) {
     }
 }
 
-export async function fetchFileCollection(id, f) {
-    let url = PUBLIC_BACKEND_ADDRESS + "/getCollection.php?collectionId=" + id;
-    let body = {
+export async function fetchFileCollection(id) {
+    const cfg = await getConfig();
+    const backendAddress = cfg.backendAddress;
+
+    let result = await fetch(backendAddress + "/getCollection.php?collectionId=" + id, {
         method: "GET",
         credentials: "include",
-    }
-
-    let result = null;
-
-    if(f) {
-        result = await f(url, body);
-    } else {
-        result = await fetch(url, body);
-    }
-
+    });
 
     let collections = await result.json();
     return collections;
 }
 
-export async function fetchFileCollections(f) {
-    let body = {
+export async function fetchFileCollections() {
+    const cfg = await getConfig();
+    const backendAddress = cfg.backendAddress;
+
+    let result = await fetch(backendAddress + "/admin/files/getCollections.php", {
         method: "GET",
         credentials: "include"
-    }
-
-    let result = await fetch(PUBLIC_BACKEND_ADDRESS + "/admin/files/getCollections.php", body);
-
+    });
 
     let collections = await result.json();
     return collections;
 }
 
 export async function deleteFileCollections(id) {
+    const cfg = await getConfig();
+    const backendAddress = cfg.backendAddress;
+
     let fd = new FormData();
     fd.set("collection_id", id);
 
-    let response = await fetch(PUBLIC_BACKEND_ADDRESS + "/admin/files/deleteCollection.php", {
+    let response = await fetch(backendAddress + "/admin/files/deleteCollection.php", {
         method: "POST",
         credentials: "include",
         body: fd
@@ -83,7 +91,10 @@ export async function deleteFileCollections(id) {
 }
 
 export async function fetchUsers() {
-    let result = await fetch(PUBLIC_BACKEND_ADDRESS + "/admin/users/getUsers.php", {
+    const cfg = await getConfig();
+    const backendAddress = cfg.backendAddress;
+
+    let result = await fetch(backendAddress + "/admin/users/getUsers.php", {
         method: "GET",
         credentials: "include"
     });
@@ -93,13 +104,16 @@ export async function fetchUsers() {
 }
 
 export async function createUser(username, email, password, role) {
+    const cfg = await getConfig();
+    const backendAddress = cfg.backendAddress;
+    
     let fd = new FormData();
     fd.set("username", username);
     fd.set("email", email);
     fd.set("password", password);
     fd.set("role", role);
 
-    let response = await fetch(PUBLIC_BACKEND_ADDRESS + "/admin/users/createUser.php", {
+    let response = await fetch(backendAddress + "/admin/users/createUser.php", {
         method: "POST",
         credentials: "include",
         body: fd
@@ -111,10 +125,13 @@ export async function createUser(username, email, password, role) {
 } 
 
 export async function deleteUser(id) {
+    const cfg = await getConfig();
+    const backendAddress = cfg.backendAddress;
+    
     let fd = new FormData();
     fd.set("user_id", id);
 
-    let response = await fetch(PUBLIC_BACKEND_ADDRESS + "/admin/users/deleteUser.php", {
+    let response = await fetch(backendAddress + "/admin/users/deleteUser.php", {
         method: "POST",
         credentials: "include",
         body: fd

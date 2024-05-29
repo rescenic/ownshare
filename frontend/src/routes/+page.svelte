@@ -1,9 +1,9 @@
 <script>
-    import { PUBLIC_BACKEND_ADDRESS } from "$env/static/public";
-    import { fetchFileCollection } from "$lib/api.js";
+    import { fetchFileCollection, getConfig } from "$lib/api.js";
     import { page } from '$app/stores'
 	import { onMount } from "svelte";
     import Handlebars from "handlebars";
+    import { base } from '$app/paths'
 
     $: collection = {};
 
@@ -12,20 +12,23 @@
 
     onMount(async () => {
 
-        let response = await fetch("/theme/template.html");
+        const cfg = await getConfig();
+        let backendAddress = cfg.backendAddress;
+
+        let response = await fetch(base + "/theme/template.html");
         let templateHTML = await response.text();
         let template = Handlebars.compile(templateHTML);
 
         let collectionId = $page.url.searchParams.get("q");
-        collection = await fetchFileCollection(collectionId);
+        collection = await fetchFileCollection(collectionId, backendAddress);
 
         for(let i = 0; i < collection.files.length; i++) {
             collection.files[i].index = i + 1;
             collection.files[i].formatedSize = formatBytes(collection.files[i].size); 
-            collection.files[i].url = PUBLIC_BACKEND_ADDRESS + collection.files[i].location;
+            collection.files[i].url = backendAddress + collection.files[i].location;
         }
 
-        collection.zipUrl = PUBLIC_BACKEND_ADDRESS + collection.path + "/" + collection.collection_id + ".zip";
+        collection.zipUrl = backendAddress + collection.path + "/" + collection.collection_id + ".zip";
 
         html = template({ collection });
     });
@@ -40,7 +43,7 @@
 
 </script>
 
-<link rel="stylesheet" href="/theme/style.css">
+<link rel="stylesheet" href="{base}/theme/style.css">
 {@html html }
 
 <!-- <div class="w-full h-screen flex items-center justify-center bg-base-300">

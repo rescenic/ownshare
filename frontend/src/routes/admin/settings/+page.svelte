@@ -2,6 +2,7 @@
     import { goto } from '$app/navigation';
 	import { onMount } from "svelte";
     import { getOption, setOption } from "$lib/api.js";
+    import { backendAddress } from "$lib/config.js";
 
     let pageError = "";
 
@@ -14,13 +15,13 @@
 
     async function fetchOptions() {
         for(let option in options) {
-            options[option] = await getOption(option);
+            options[option] = await getOption(option, $backendAddress);
         }
     }
 
     async function saveOptions() {
         for(let option in options) {
-            await setOption(option, options[option]);
+            await setOption(option, options[option], $backendAddress);
         }
 
         console.log("Options Saved");

@@ -3,7 +3,8 @@
 	import { onMount } from "svelte";
     import { deleteUser, fetchUsers } from "$lib/api.js";
     import CreateUserModal from "../../../lib/components/CreateUserModal.svelte";
-
+    import { backendAddress } from "$lib/config.js";
+    import { base } from '$app/paths'
 
     $: users = [];
 
@@ -57,7 +58,7 @@
                                     deleteUser(user.id);
                                     users = await fetchUsers();
                                 }}>
-                                <img src="/icons/delete.svg" alt="">   
+                                <img src="{base}/icons/delete.svg" alt="">   
                             </button>
                         </td>
                     </tr>
