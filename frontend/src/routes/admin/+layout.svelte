@@ -35,7 +35,7 @@
 <div class="flex h-screen">
     <nav class="bg-base-100 w-56 h-screen p-4 flex flex-col justify-between">
         <div>
-            <a href="/" class="text-2xl text-center w-full block p-4">Own<span class="font-bold">Share</span></a>
+            <a href="{base}" class="text-2xl text-center w-full block p-4">Own<span class="font-bold">Share</span></a>
 
             <ul class="menu p-0 w-full h-full">
                 <li>

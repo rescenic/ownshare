@@ -2,9 +2,10 @@
     import { goto } from '$app/navigation';
 	import { onMount } from "svelte";
     import { getOption, setOption } from "$lib/api.js";
-    import { backendAddress } from "$lib/config.js";
 
     let pageError = "";
+
+    let loading = true;
 
     let options = {
         files_upload_folder_location: "",
@@ -15,21 +16,22 @@
 
     async function fetchOptions() {
         for(let option in options) {
-            options[option] = await getOption(option, $backendAddress);
+            options[option] = await getOption(option);
         }
     }
 
     async function saveOptions() {
         for(let option in options) {
-            await setOption(option, options[option], $backendAddress);
+            await setOption(option, options[option]);
         }
 
         console.log("Options Saved");
         fetchOptions();
     }
 
-    onMount(() => {
-        fetchOptions();
+    onMount(async () => {
+        await fetchOptions();
+        loading = false;
     })
 
 </script>
@@ -44,24 +46,31 @@
 
 <h2 class="text-2xl font-bold">File Settings</h2>
 
-<label class="form-control w-full">
-    <div class="label"><span class="label-text">Upload Folder Location</span></div>
-    <input type="text" class="input input-bordered w-full max-w-lg" bind:value={options.files_upload_folder_location}/>
-</label>
+{#if loading}
+    <div class="w-full flex justify-center items-center">
+        <span class="loading loading-dots loading-lg"></span>
+    </div>
+{:else}
+    <label class="form-control w-full">
+        <div class="label"><span class="label-text">Upload Folder Location</span></div>
+        <input type="text" class="input input-bordered w-full max-w-lg" bind:value={options.files_upload_folder_location}/>
+    </label>
 
-<label class="form-control w-full">
-    <div class="label"><span class="label-text">Default save time</span></div>
-    <input type="text" class="input input-bordered w-full max-w-lg" bind:value={options.files_default_save_time}/>
-</label>
+    <label class="form-control w-full">
+        <div class="label"><span class="label-text">Default save time</span></div>
+        <input type="text" class="input input-bordered w-full max-w-lg" bind:value={options.files_default_save_time}/>
+    </label>
 
-<label class="form-control w-full">
-    <div class="label"><span class="label-text">Id length</span></div>
-    <input type="text" class="input input-bordered w-full max-w-lg" bind:value={options.files_id_length}/>
-</label>
+    <label class="form-control w-full">
+        <div class="label"><span class="label-text">Id length</span></div>
+        <input type="text" class="input input-bordered w-full max-w-lg" bind:value={options.files_id_length}/>
+    </label>
 
-<label class="form-control w-full">
-    <div class="label"><span class="label-text">Upload Chunk Size</span></div>
-    <input type="text" class="input input-bordered w-full max-w-lg" bind:value={options.files_upload_chunk_size}/>
-</label>
+    <label class="form-control w-full">
+        <div class="label"><span class="label-text">Upload Chunk Size</span></div>
+        <input type="text" class="input input-bordered w-full max-w-lg" bind:value={options.files_upload_chunk_size}/>
+    </label>
 
-<button class="btn btn-priary mt-8" on:click={saveOptions}>Save</button>
+    <button class="btn btn-priary mt-8" on:click={saveOptions}>Save</button>
+{/if}
+

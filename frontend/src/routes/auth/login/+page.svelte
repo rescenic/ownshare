@@ -25,7 +25,7 @@
         if(result.error) {
             error = result.error;
         } else {
-            goto(base + "/admin");
+            goto(base + "/admin/files");
         }
     }
 

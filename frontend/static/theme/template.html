@@ -3,32 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>{{ collection.title }}</title>
 </head>
 <body>
     <main>
         <div class="download-card">
-            <h1>{{ collection.title }}</h1>
 
-            {{#each collection.files }}
-                <a class="file" href="{{url}}">
-                    <section>
-                        <span class="index">{{index}}</span>
-                        <span class="filename">{{name}}</span>
-                    </section>
+            {{#if collection.error}}
+                {{ collection.error }}
+            {{else}}
+                <header>
+                    <h1>{{ collection.title }}</h1>
 
-                    <section>
-                        <span class="filesize">{{formatedSize}}</span>
-                        <span class="download-icon">
-                            <img src="./theme/icon.svg" alt="">
-                        </span>
-                    </section>  
-                </a>
+                    <p class="comment">
+                        {{ collection.comment  }}
+                    </p>
+                </header>
 
-                <hr>
-            {{/each}}
+                {{#each collection.files }}
+                    <a class="file" href="{{url}}">
+                        <section>
+                            <span class="index">{{index}}</span>
+                            <span class="filename">{{name}}</span>
+                        </section>
 
-            <a class="button" href="{{collection.zipUrl}}">Download all</a>
+                        <section>
+                            <span class="filesize">{{formatedSize}}</span>
+                            <span class="download-icon">
+                                <img src="./theme/icon.svg" alt="">
+                            </span>
+                        </section>  
+                    </a>
+
+                    <hr>
+                {{/each}}
+
+                <a class="button" href="{{collection.zipUrl}}">Download all</a>
+            {{/if}}
         </div>
     </main>
 </body>

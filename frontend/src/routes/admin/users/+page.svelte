@@ -10,10 +10,12 @@
 
     let pageError = "";
     let showCreateUserModal = false;
+    let loading = true;
 
 
     onMount(async () => {
         users = await fetchUsers();
+        loading = false;
     });
 
 </script>
@@ -55,7 +57,7 @@
                                 <img src="/icons/edit.svg" alt="">   
                             </button> -->
                             <button class="btn btn-error btn-sm p-0 aspect-square" on:click={async () => {
-                                    deleteUser(user.id);
+                                    await deleteUser(user.id);
                                     users = await fetchUsers();
                                 }}>
                                 <img src="{base}/icons/delete.svg" alt="">   
@@ -67,4 +69,10 @@
             {/if}
         </tbody>
     </table>
+
+    {#if loading}
+        <div class="w-full flex justify-center items-center h-full">
+            <span class="loading loading-dots loading-lg"></span>
+        </div>
+    {/if}   
 </div>

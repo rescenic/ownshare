@@ -14,14 +14,27 @@ if(!isset($_GET["collectionId"])) {
 
 $collectionId = $_GET["collectionId"];
 
-
 $collection = $upload->getCollectionEntry($collectionId);
 
-if($collection == null) {
-    echo '{"error": "could not fetch collection entry!"}';
+if($collection == null || $collection == []) {
+    echo '{"error": "Collection not found!"}';
     exit();
 }
 
+if($collection["downloads"] >= $collection["max_downloads"]) {
+    echo '{"error": "Max Downloads reached!"}';
+    exit();
+}
+
+$expiryDate = new DateTime($collection['save_until']);
+$now = new DateTime();
+
+if($expiryDate < $now) {
+    echo '{"error": "Collection expired!"}';
+    exit();
+}
+
+$upload->increaseCollectionDownloadCount($collectionId);
 $json_collection = json_encode($collection);
 echo $json_collection;
 

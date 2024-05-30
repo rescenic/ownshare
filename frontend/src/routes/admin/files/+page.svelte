@@ -2,12 +2,12 @@
 	import { onMount } from "svelte";
     import FileUploadModal from "../../../lib/components/FileUploadModal.svelte";
     import { fetchFileCollections, fetchFileCollection, deleteFileCollections } from "$lib/api.js";
-    import { backendAddress } from "$lib/config.js";
     import { base } from '$app/paths'
 
     $: fileCollections = [];
     
     let showUploadModal = false;
+    let loading = true;
 
     function formatBytes(bytes) {
         if (bytes === 0) return '0 Bytes';
@@ -24,13 +24,14 @@
 
     onMount(async () => {
         fileCollections = await fetchFileCollections();
+        loading = false;
     });
 
 </script>
 
 <!-- Upload File Modal -->
 
-<FileUploadModal bind:showUploadModal on:uploadFinished={async () => {fileCollections = await fetchFileCollections($backendAddress);}}></FileUploadModal>
+<FileUploadModal bind:showUploadModal on:uploadFinished={async () => {fileCollections = await fetchFileCollections();}}></FileUploadModal>
 
 <!-- File List -->
 
@@ -79,8 +80,8 @@
                             <img src="/icons/edit.svg" alt="">   
                         </button> -->
                         <button class="btn btn-error btn-sm p-0 aspect-square" on:click={async () => {
-                                deleteFileCollections(collection.collection_id, $backendAddress);
-                                fileCollections = await fetchFileCollections($backendAddress);
+                                deleteFileCollections(collection.collection_id);
+                                fileCollections = await fetchFileCollections();
                             }}>
                             <img src="{base}/icons/delete.svg" alt="">   
                         </button>
@@ -90,6 +91,12 @@
             {/each}
           </tbody>
         </table>
+
+        {#if loading}
+            <div class="w-full flex justify-center items-center h-full">
+                <span class="loading loading-dots loading-lg"></span>
+            </div>
+        {/if}   
     </div>
 </div>
 

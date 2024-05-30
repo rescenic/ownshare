@@ -27,6 +27,13 @@ if($user["role"] != "admin" && $user["role"] != "manager") {
 
 $collectionId = $_POST["collection_id"];
 
+$collection = $upload->getCollectionEntry($collectionId);
+
+if($collection != null) {
+    $collectionDir = ROOT_DIR . $collection["path"];
+    rrmdir($collectionDir);
+}
+
 $stmt = $db->prepare("DELETE FROM file_collections WHERE collection_id = ?");
 $stmt->bind_param("s", $collectionId);
 $stmt->execute();
@@ -37,3 +44,18 @@ $stmt->execute();
 
 echo '{"message": "collection deleted successfully!"}';
 exit();
+
+function rrmdir($dir) { 
+    if (is_dir($dir)) { 
+      $objects = scandir($dir);
+      foreach ($objects as $object) { 
+        if ($object != "." && $object != "..") { 
+          if (is_dir($dir. DIRECTORY_SEPARATOR .$object) && !is_link($dir."/".$object))
+            rrmdir($dir. DIRECTORY_SEPARATOR .$object);
+          else
+            unlink($dir. DIRECTORY_SEPARATOR .$object); 
+        } 
+      }
+      rmdir($dir); 
+    } 
+  }

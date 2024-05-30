@@ -22,13 +22,15 @@
         let collectionId = $page.url.searchParams.get("q");
         collection = await fetchFileCollection(collectionId, backendAddress);
 
-        for(let i = 0; i < collection.files.length; i++) {
-            collection.files[i].index = i + 1;
-            collection.files[i].formatedSize = formatBytes(collection.files[i].size); 
-            collection.files[i].url = backendAddress + collection.files[i].location;
-        }
+        if(!collection.error) {
+            for(let i = 0; i < collection.files.length; i++) {
+                collection.files[i].index = i + 1;
+                collection.files[i].formatedSize = formatBytes(collection.files[i].size); 
+                collection.files[i].url = backendAddress + collection.files[i].location;
+            }
 
-        collection.zipUrl = backendAddress + collection.path + "/" + collection.collection_id + ".zip";
+            collection.zipUrl = backendAddress + collection.path + "/" + collection.collection_id + ".zip";
+        }
 
         html = template({ collection });
     });
