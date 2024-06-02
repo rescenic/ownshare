@@ -46,6 +46,7 @@ for($i = 0; $i < count($collections); $i++) {
 }
 
 $json_collections = json_encode($collections);
+
 echo $json_collections;
 
 exit();

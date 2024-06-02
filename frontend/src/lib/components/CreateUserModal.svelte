@@ -1,9 +1,7 @@
 <script>
     import Modal from "./Modal.svelte";
 
-    import { PUBLIC_BACKEND_ADDRESS } from "$env/static/public"
     import { createUser } from "$lib/api.js";
-    import { invalidateAll } from '$app/navigation';
     import { createEventDispatcher } from 'svelte';
 
 	const dispatch = createEventDispatcher();

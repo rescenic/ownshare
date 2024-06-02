@@ -41,6 +41,10 @@ class Upload {
         $result = $stmt->get_result();
         $collection = $result->fetch_assoc();
 
+        if($collection == null) {
+            return null;
+        }
+
         $totalSize = 0;
         
         $stmt = $this->conn->prepare("SELECT * FROM file_registry WHERE collection_id = ?");
@@ -62,6 +66,12 @@ class Upload {
     public function createFileEntry($name, $size, $location, $collection_id) {
         $stmt = $this->conn->prepare("INSERT INTO file_registry(name, size, location, collection_id) VALUES (?,?,?,?)");
         $stmt->bind_param("ssss", $name, $size, $location, $collection_id);
+        $stmt->execute();
+    }
+
+    public function increaseCollectionDownloadCount($collectionId) {
+        $stmt = $this->conn->prepare("UPDATE file_collections SET downloads = downloads + 1 WHERE collection_id = ?;");
+        $stmt->bind_param("s", $collectionId);
         $stmt->execute();
     }
 }

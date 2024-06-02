@@ -9,9 +9,6 @@ include_once("includes/classes/Upload.php");
 
 define("ROOT_DIR", dirname(__FILE__));
 
-include_once("includes/install.php");
-createTables($db);
-
 global $auth;
 global $options;
 global $upload;
@@ -19,10 +16,6 @@ global $upload;
 $auth = new Auth($db);
 $options = new Options($db);
 $upload = new Upload($db);
-
-
-//TODO: remove for prod
-$options->setDefaultOptions();
 
 
 header("Access-Control-Allow-Origin: " . APP_CORS_URLS);

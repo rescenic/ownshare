@@ -1,9 +1,9 @@
 <script>
     import Modal from "./Modal.svelte";
 
-    import { PUBLIC_BACKEND_ADDRESS } from "$env/static/public"
     import { getOption, setOption } from "$lib/api.js";
     import { createEventDispatcher } from 'svelte';
+    import { getConfig } from "$lib/api.js";
 
     const dispatch = createEventDispatcher();
 
@@ -29,6 +29,7 @@
 
     async function startUpload() {
         chunkSize = parseInt(await getOption("files_upload_chunk_size") * 8);
+        const cfg = await getConfig();
         
         for(let i = 0; i < files.length; i++) {
             files[i].neededChunks = Math.ceil(files[i].size / chunkSize);
@@ -36,18 +37,19 @@
         }
     
         uploadingView = true;
-        let sessionData = await createUploadSession();
-        await uploadFiles(sessionData.collection_id);
-        await finishUpload(sessionData.collection_id);
+        let sessionData = await createUploadSession(cfg);
+        await uploadFiles(sessionData.collection_id, cfg);
+        await finishUpload(sessionData.collection_id, cfg);
     }
 
-    async function uploadFiles(sessionId) {
+    async function uploadFiles(sessionId, cfg) {
         for(let i = 0; i < files.length; i++) {
-            await uploadFile(i, sessionId);   
+            await uploadFile(i, sessionId, cfg);   
         }
     }
 
-    async function createUploadSession() {
+    async function createUploadSession(cfg) {
+        const backendAddress = cfg.backendAddress;
 
         let fd = new FormData();
         fd.set("title", title);
@@ -56,7 +58,7 @@
         fd.set("max_downloads", maxDownloads);
         fd.set("save_duration", saveDuration);
 
-        let response = await fetch(PUBLIC_BACKEND_ADDRESS + "/admin/files/upload.php", {
+        let response = await fetch(backendAddress + "/admin/files/upload.php", {
             method: "POST",
             credentials: "include",
             body: fd
@@ -66,7 +68,8 @@
         return result;
     }
 
-    async function uploadFile(fileIndex, sessionId) {
+    async function uploadFile(fileIndex, sessionId, cfg) {
+        const backendAddress = cfg.backendAddress;
         let file = files[fileIndex];
         for (let start = 0; start < file.size; start += chunkSize) {
             const chunk = file.slice(start, start + chunkSize)
@@ -76,7 +79,7 @@
             fd.set('collection', sessionId);
             fd.set('size', file.size);
 
-            let response = await fetch(PUBLIC_BACKEND_ADDRESS + "/admin/files/uploadChunk.php", {
+            let response = await fetch(backendAddress + "/admin/files/uploadChunk.php", {
                 method: "POST",
                 credentials: "include",
                 body: fd
@@ -89,11 +92,12 @@
 
     }
 
-    async function finishUpload(sessionId) {
+    async function finishUpload(sessionId, cfg) {
+        const backendAddress = cfg.backendAddress;
         let fd = new FormData();
         fd.set("collection_id", sessionId);
 
-        let response = await fetch(PUBLIC_BACKEND_ADDRESS + "/admin/files/finishUpload.php", {
+        let response = await fetch(backendAddress + "/admin/files/finishUpload.php", {
             method: "POST",
             credentials: "include",
             body: fd

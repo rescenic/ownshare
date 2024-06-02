@@ -1,14 +1,17 @@
 <script>
-    import { PUBLIC_BACKEND_ADDRESS } from "$env/static/public"
     import { goto } from '$app/navigation';
-
+    import { base } from '$app/paths';
+    import { getConfig } from "$lib/api.js";
 
     let username = "";
     let password = "";
     let error = "";
 
     async function login() {
-        let response = await fetch(PUBLIC_BACKEND_ADDRESS + "/auth/login.php", {
+        const cfg = await getConfig();
+        const backendAddress = cfg.backendAddress;
+
+        let response = await fetch(backendAddress + "/auth/login.php", {
             method: "POST",
             credentials: "include",
             body: JSON.stringify({
@@ -22,7 +25,7 @@
         if(result.error) {
             error = result.error;
         } else {
-            goto("/admin");
+            goto(base + "/admin/files");
         }
     }
 
