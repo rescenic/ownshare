@@ -11,7 +11,7 @@ OwnShare is an open-source filesharing software that can be used as a direct alt
 ![ownshare_5](https://github.com/Das-Felix/ownshare/assets/62439997/a52fecb2-e6c2-4271-bbc3-9dbefa6808b2)
 ![ownshare_6](https://github.com/Das-Felix/ownshare/assets/62439997/26852954-9cfc-4f76-9e99-1afe620e0437)
 
-##Custom Theme
+## Custom Theme
 You can customize the look of your download page by editing the template.html and style.css file inside the theme folder. The template.html file uses Handlebars as its template engine. You can look into the default theme files to see the structure.
 
 ## Installation
