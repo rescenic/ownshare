@@ -9,7 +9,6 @@ include_once("includes/classes/Upload.php");
 
 define("ROOT_DIR", dirname(__FILE__));
 
-include_once("includes/install.php");
 createTables($db);
 
 global $auth;

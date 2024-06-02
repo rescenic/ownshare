@@ -1,4 +1,5 @@
 <?php 
+    include_once("includes/install.php");
     include_once("functions.php");
 
     if(APP_SETUP_COMPLETE == true) {

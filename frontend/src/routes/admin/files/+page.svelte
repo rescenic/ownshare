@@ -80,7 +80,7 @@
                             <img src="/icons/edit.svg" alt="">   
                         </button> -->
                         <button class="btn btn-error btn-sm p-0 aspect-square" on:click={async () => {
-                                deleteFileCollections(collection.collection_id);
+                                await deleteFileCollections(collection.collection_id);
                                 fileCollections = await fetchFileCollections();
                             }}>
                             <img src="{base}/icons/delete.svg" alt="">   
