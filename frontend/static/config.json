@@ -1,4 +1,3 @@
 {
-    "backendAddress": "http://localhost:3838",
-    "rootURL": ""
+    "backendAddress": "http://localhost:3838"
 }

@@ -3,7 +3,7 @@
 	import { onMount } from "svelte";
     import { base } from '$app/paths'
     import { getConfig } from "$lib/api.js";
-
+    import { messages } from "$lib/stores.js";
 
     export let data;
 
@@ -31,6 +31,22 @@
         validateSession();
     });
 </script>
+
+<div class="toast toast-end">
+    {#each $messages as msg, i}
+        <div class="alert alert-{msg.type}">
+            <span>{msg.message}</span>
+            <button class="btn btn-circle btn-ghost btn-xs" on:click={() => {
+                messages.update(val => {
+                    val.splice(i, 1);
+                    return val;
+                });
+            }}>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+        </div>
+    {/each}
+</div>
 
 <div class="flex h-screen">
     <nav class="bg-base-100 w-56 h-screen p-4 flex flex-col justify-between">

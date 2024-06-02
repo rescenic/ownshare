@@ -1,6 +1,25 @@
 <?php 
+    include_once("config.php");
+    include_once("includes/database.php");
     include_once("includes/install.php");
-    include_once("functions.php");
+
+    include_once("includes/classes/Auth.php");
+    include_once("includes/classes/Options.php");
+    include_once("includes/classes/Upload.php");
+
+    define("ROOT_DIR", dirname(__FILE__));
+
+    createTables($db);
+
+    global $auth;
+    global $options;
+    global $upload;
+
+    $auth = new Auth($db);
+    $options = new Options($db);
+    $upload = new Upload($db);
+
+    $options->setDefaultOptions();
 
     if(APP_SETUP_COMPLETE == true) {
         echo "Setup already complete!";
@@ -32,4 +51,9 @@
         $fileContents = implode(PHP_EOL, $fileLines);
         file_put_contents($filePath, $fileContents);
     }
+
+    header("Access-Control-Allow-Origin: " . APP_CORS_URLS);
+    header("Access-Control-Allow-Headers: " . APP_CORS_URLS);
+    header("Access-Control-Allow-Credentials: true");
+
     

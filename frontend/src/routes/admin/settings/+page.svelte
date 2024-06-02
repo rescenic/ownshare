@@ -2,6 +2,7 @@
     import { goto } from '$app/navigation';
 	import { onMount } from "svelte";
     import { getOption, setOption } from "$lib/api.js";
+    import { messages } from "$lib/stores.js"; 
 
     let pageError = "";
 
@@ -26,6 +27,12 @@
         }
 
         console.log("Options Saved");
+        messages.update(val => {
+            return [...val, {
+                type: "success",
+                message: "Options saved!"
+            }]
+        })
         fetchOptions();
     }
 
