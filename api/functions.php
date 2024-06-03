@@ -7,6 +7,10 @@ include_once("includes/classes/Auth.php");
 include_once("includes/classes/Options.php");
 include_once("includes/classes/Upload.php");
 
+header("Access-Control-Allow-Origin: " . APP_CORS_URLS);
+header("Access-Control-Allow-Headers: " . APP_CORS_URLS);
+header("Access-Control-Allow-Credentials: true");
+
 define("ROOT_DIR", dirname(__FILE__));
 
 global $auth;
@@ -16,8 +20,3 @@ global $upload;
 $auth = new Auth($db);
 $options = new Options($db);
 $upload = new Upload($db);
-
-
-header("Access-Control-Allow-Origin: " . APP_CORS_URLS);
-header("Access-Control-Allow-Headers: " . APP_CORS_URLS);
-header("Access-Control-Allow-Credentials: true");

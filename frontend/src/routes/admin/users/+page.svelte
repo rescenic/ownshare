@@ -60,7 +60,7 @@
                                     await deleteUser(user.id);
                                     users = await fetchUsers();
                                 }}>
-                                <img src="{base}/icons/delete.svg" alt="">   
+                                <img src="{base}/icon/delete.svg" alt="">   
                             </button>
                         </td>
                     </tr>

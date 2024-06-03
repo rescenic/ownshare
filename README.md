@@ -15,10 +15,43 @@ OwnShare is an open-source filesharing software that can be used as a direct alt
 You can customize the look of your download page by editing the template.html and style.css file inside the theme folder. The template.html file uses Handlebars as its template engine. You can look into the default theme files to see the structure.
 
 ## Installation
+There are multiple ways of installing OwnShare. When Installed correctly, before using your app you have to go to /api/installer.php. This will create all the database tables and a default admin user. You will find more info on that page.
+
+## Install from Release
 
 Requirements: PHP Environment, MySQL Database
 
 1. Download the latest release and upload it to your PHP Environment
-2. Edit the config.json file in OwnShares root folder and change the backendAddress to point to the api folder. This address has to be an absolute URL starting with “https://”
-3. Edit the config.php file in the api folder. Enter your Database credentials there. Set APP_CORS_URLS to “”. This field only has to be set if your backend runs on a different domain than your frontend.
-4. go to <ownshare root>/api/installer.php if everything is set correctly you should get a success screen informing you of the default credentials. You can then login at <ownshare root>/auth/login
+2. follow the steps for manual configuration
+
+
+## Building the app from the sourcecode
+
+To make the build process as easy as possible, I created the build.py script that is used to build the svelte app, and then merge it with the backend.
+
+Run it with: python3 build.py
+
+This will create a build folder that contains the finished build, then follow the manual configuration.
+
+
+## Manual configuration
+For OwnShare to work there are two config files that have to be edited:
+
+1. **config.json**<br>
+    this file is the config file for the frontend and contains the backendAddress. If OwnShare is running on a subfolder it has to contain the absolute url to the backend. If not you can set it to /api<br>
+    **Examples:**<br>
+    www.your-domain.com - backendAddress: "/"<br>
+    www.your-domain.com/ownshare - backendAddress: "http://www.your-domain.com/ownshare/api"
+2. **config.php**<br>
+    this file contains the backend configuration.<br>
+    **DB_HOST, DB_USER, DB_PASSWORD and DB_NAME** have to be set to your Database credentials.<br>
+    **DB_CORS_URLS** can be set to "" when your backend and frontend are running on the same domain.
+
+
+## Running with Docker
+If you want to run OwnShare with docker, you can use the provided Dockerfile and docker-compose.yml file. The Dockerfile runs the setup.sh script as its entry point. This script loads the ENV Variables from the docker-compose file and automatically configures OwnShare.
+
+1. Clone the repo
+2. run the python build script - python3 build.py
+3. configure the docker-compose.yml
+4. build or run the image - for example: docker-compose up --build

@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: php_sveltekit
+    volumes:
+      - ./build:/var/www/html
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_NAME: ownshare
+      DB_USER: ownshare
+      DB_PASSWORD: password
+      ROOT_URL: /
+      BACKEND_ADDRESS: /api
+    networks:
+      - app-network
+
+  db:
+    image: mariadb:10.5
+    container_name: mariadb
+    restart: always
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: ownshare
+      MYSQL_USER: ownshare
+      MYSQL_PASSWORD: password
+    networks:
+      - app-network
+
+volumes:
+  db_data:
+
+networks:
+  app-network:
+    driver: bridge

@@ -29,8 +29,6 @@ if($session_token == "") {
     exit();
 }
 
-echo '{"message": "logged in successfully!"}';
-
 setcookie("session_token", $session_token, [
     "expires" => time() + (86400 * 30),
     "path" => "/",
@@ -38,5 +36,7 @@ setcookie("session_token", $session_token, [
     "secure" => "true",
     "samesite" => "None"
 ]);
+
+echo '{"message": "logged in successfully!"}';
 
 exit();

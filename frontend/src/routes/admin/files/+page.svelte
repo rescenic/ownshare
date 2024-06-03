@@ -74,7 +74,7 @@
                     <td>{formatDate(collection.save_until)}</td>
                     <td class="flex flex-nowrap gap-1">
                         <a class="btn btn-secondary btn-sm p-0 aspect-square" href="{base}/?q={collection.collection_id}">
-                            <img src="{base}/icons/link.svg" alt="">   
+                            <img src="{base}/icon/link.svg" alt="">   
                         </a>
                         <!-- <button class="btn btn-secondary btn-sm p-0 aspect-square">
                             <img src="/icons/edit.svg" alt="">   
@@ -83,7 +83,7 @@
                                 await deleteFileCollections(collection.collection_id);
                                 fileCollections = await fetchFileCollections();
                             }}>
-                            <img src="{base}/icons/delete.svg" alt="">   
+                            <img src="{base}/icon/delete.svg" alt="">   
                         </button>
                     </td>
                 </tr>
