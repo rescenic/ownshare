@@ -11,9 +11,13 @@ RUN apt-get install -y \
 
 # Copy the build directory to the Apache web root
 COPY build /var/www/html/
+COPY setup.sh /usr/local/bin/setup.sh
 
 # Set the working directory
 WORKDIR /var/www/html
+
+RUN chmod +x /usr/local/bin/setup.sh
+ENTRYPOINT ["/usr/local/bin/setup.sh"]
 
 # Set the proper permissions
 RUN chown -R www-data:www-data /var/www/html

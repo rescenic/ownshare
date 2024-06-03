@@ -1,10 +1,8 @@
 import subprocess
 import os
 import shutil
-import json
-from dotenv import load_dotenv
 
-def build(db_host, db_name, db_user, db_password, root_url):
+def build():
     print("starting build...")
     print("building sveltekit app...")
 
@@ -48,43 +46,6 @@ def build(db_host, db_name, db_user, db_password, root_url):
     else:
         print(f"{api_dir} does not exist.")
 
-    # Set the contents of ./build/config.json
-    config_json_path = os.path.join(build_dir, "config.json")
-    config_json_content = {
-        "backendAddress": root_url + "api"
-    }
-    with open(config_json_path, "w") as config_json_file:
-        json.dump(config_json_content, config_json_file, indent=4)
-    print(f"Set {config_json_path} to {config_json_content}")
-
-    # Set the contents of ./build/api/config.php
-    config_php_path = os.path.join(build_dir, "api", "config.php")
-    config_php_content = f"""<?php
-define("APP_SETUP_COMPLETE", false);
-
-define("APP_CORS_URLS", "{root_url}");
-define("APP_DB_HOST", "{db_host}");
-define("APP_DB_NAME", "{db_name}");
-define("APP_DB_USER", "{db_user}");
-define("APP_DB_PASSWORD", "{db_password}");
-"""
-    with open(config_php_path, "w") as config_php_file:
-        config_php_file.write(config_php_content)
-    print(f"Set {config_php_path} to provided database and URL configuration")
-
 
 if __name__ == "__main__":
-    load_dotenv()
-
-    db_host = os.getenv("DB_HOST")
-    db_name = os.getenv("DB_NAME")
-    db_user = os.getenv("DB_USER")
-    db_password = os.getenv("DB_PASSWORD")
-    root_url = os.getenv("ROOT_URL")
-
-    if not all([db_host, db_name, db_user, db_password, root_url]):
-        print("Error: One or more environment variables are missing.")
-        print("Required vars: DB_HOST, DB_NAME, DB_USER, DB_PASSWORD, ROOT_URL")
-        exit(1)
-
-    build(db_host, db_name, db_user, db_password, root_url)
+    build()

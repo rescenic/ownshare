@@ -12,9 +12,11 @@ services:
       - db
     environment:
       DB_HOST: db
-      DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ownshare
+      DB_USER: ownshare
+      DB_PASSWORD: password
+      ROOT_URL: /
+      BACKEND_ADDRESS: /api
     networks:
       - app-network
 
@@ -25,10 +27,10 @@ services:
     volumes:
       - db_data:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: ownshare
+      MYSQL_USER: ownshare
+      MYSQL_PASSWORD: password
     networks:
       - app-network
 
