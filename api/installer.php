@@ -7,6 +7,10 @@
     include_once("includes/classes/Options.php");
     include_once("includes/classes/Upload.php");
 
+    header("Access-Control-Allow-Origin: " . APP_CORS_URLS);
+    header("Access-Control-Allow-Headers: " . APP_CORS_URLS);
+    header("Access-Control-Allow-Credentials: true");
+
     define("ROOT_DIR", dirname(__FILE__));
 
     createTables($db);
@@ -51,9 +55,4 @@
         $fileContents = implode(PHP_EOL, $fileLines);
         file_put_contents($filePath, $fileContents);
     }
-
-    header("Access-Control-Allow-Origin: " . APP_CORS_URLS);
-    header("Access-Control-Allow-Headers: " . APP_CORS_URLS);
-    header("Access-Control-Allow-Credentials: true");
-
     

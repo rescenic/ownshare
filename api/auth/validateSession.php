@@ -22,5 +22,4 @@ if($user == null) {
 
 echo '{"message": "valid session"}';
 
-
 exit();
