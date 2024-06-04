@@ -22,6 +22,8 @@
         let collectionId = $page.url.searchParams.get("q");
         collection = await fetchFileCollection(collectionId, backendAddress);
 
+        console.log(collection)
+
         if(!collection.error) {
             for(let i = 0; i < collection.files.length; i++) {
                 collection.files[i].index = i + 1;

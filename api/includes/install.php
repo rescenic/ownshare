@@ -63,6 +63,7 @@
                 `collection_id` varchar(255) NOT NULL,
                 `title` varchar(255) NOT NULL,
                 `totalSize` int NOT NULL DEFAULT 0,
+                `totalFiles` int NOT NULL DEFAULT 0,
                 `comment` varchar(255) NOT NULL,
                 `path` varchar(255) NOT NULL,
                 `password` varchar(255) NOT NULL,

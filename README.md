@@ -40,7 +40,7 @@ For OwnShare to work there are two config files that have to be edited:
 1. **config.json**<br>
     this file is the config file for the frontend and contains the backendAddress. If OwnShare is running on a subfolder it has to contain the absolute url to the backend. If not you can set it to /api<br>
     **Examples:**<br>
-    www.your-domain.com - backendAddress: "/"<br>
+    www.your-domain.com - backendAddress: "/api"<br>
     www.your-domain.com/ownshare - backendAddress: "http://www.your-domain.com/ownshare/api"
 2. **config.php**<br>
     this file contains the backend configuration.<br>

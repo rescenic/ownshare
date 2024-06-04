@@ -60,11 +60,14 @@ export async function fetchFileCollection(id) {
     return collections;
 }
 
-export async function fetchFileCollections() {
+export async function fetchFileCollections(sortField, sortDir) {
     const cfg = await getConfig();
     const backendAddress = cfg.backendAddress;
 
-    let result = await fetch(backendAddress + "/admin/files/getCollections.php", {
+    if(sortField == null) sortField = "id";
+    if(sortDir == null) sortDir = "ASC";
+
+    let result = await fetch(backendAddress + "/admin/files/getCollections.php?sortField=" + sortField + "&sortDir=" + sortDir, {
         method: "GET",
         credentials: "include"
     });

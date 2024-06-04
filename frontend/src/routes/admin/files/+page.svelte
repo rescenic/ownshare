@@ -9,6 +9,21 @@
     let showUploadModal = false;
     let loading = true;
 
+    let tableCategorys = [
+        {title: "Name", field: "title"}, 
+        {title: "Files", field: "totalFiles"},
+        {title: "Total Size", field: "totalSize"},
+        {title: "Downloads", field: "downloads"},
+        {title: "Uploaded by", field: "uploaded_by"},
+        {title: "Uploaded at", field: "uploaded_at"},
+        {title: "Expiry Date", field: "save_until"}
+    ]
+
+    let tableSort = {
+        category: "Name",
+        dir: "ASC"
+    }
+
     function formatBytes(bytes) {
         if (bytes === 0) return '0 Bytes';
         const k = 1024;
@@ -22,8 +37,23 @@
         return `${day}.${month}.${year}`;
     }
 
+    async function changeSort(category) {
+        if(tableSort.category == category.title) {
+            tableSort.dir = tableSort.dir == "ASC" ? "DESC" : "ASC";
+        } else {
+            tableSort.category = category.title;
+            tableSort.dir = "DESC";
+        }
+
+
+        fileCollections = await fetchFileCollections(category.field, tableSort.dir);
+    }
+
     onMount(async () => {
         fileCollections = await fetchFileCollections();
+
+        console.log(fileCollections)
+
         loading = false;
     });
 
@@ -49,13 +79,17 @@
           <!-- head -->
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Total Size</th>
-              <th>Downloads</th>
-              <th>Uploaded by</th>
-              <th>Uploaded at</th>
-              <th>Expiry Date</th>
-              <th>Actions</th>
+                {#each tableCategorys as category}
+                    <th class="whitespace-nowrap" on:click={() => {changeSort(category)}}>{category.title} 
+                        {#if tableSort.category == category.title}
+                            <img src="/icon/arrow_down.svg" class="{tableSort.dir}" alt="arrow">
+                        {:else}
+                            <img src="/icon/arrow_down.svg" class="opacity-0" alt="arrow">
+                        {/if}
+                    </th>
+               {/each} 
+
+                <th>Actions</th>
             </tr>
           </thead>
 
@@ -63,6 +97,7 @@
             {#each fileCollections as collection, i}
                 <tr class="bg-base-200">
                     <td>{collection.title}</td>
+                    <td>{collection.totalFiles}</td>
                     <td>{formatBytes(collection.totalSize)}</td>
                     <td>{collection.downloads}/{collection.max_downloads}</td>
                     <td>
@@ -101,11 +136,19 @@
 </div>
 
 <style>
-    .files-grid {
-        --auto-grid-min-size: 25rem;
-  
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(var(--auto-grid-min-size), 1fr));
-        grid-gap: 1rem;
+    tr th:hover {
+        @apply bg-base-200;
+    } 
+
+    tr th {
+        @apply rounded-t-md;
+    }
+
+    tr th img {
+        @apply inline h-4 float-end;
+    }
+
+    tr th img.ASC {
+        transform: rotate(180deg);
     }
 </style>

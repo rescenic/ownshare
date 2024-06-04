@@ -55,13 +55,13 @@
 
             <ul class="menu p-0 w-full h-full">
                 <li>
-                    <a href="{base}/admin/files" class="w-full"><img src="{base}/icons/file.svg" alt="">Files</a>
+                    <a href="{base}/admin/files" class="w-full"><img src="{base}/icon/file.svg" alt="">Files</a>
                 </li>
                 <li>
-                    <a href="{base}/admin/users"><img src="{base}/icons/users.svg" alt="">Users</a>
+                    <a href="{base}/admin/users"><img src="{base}/icon/users.svg" alt="">Users</a>
                 </li>
                 <li>
-                    <a href="{base}/admin/settings"><img src="{base}/icons/settings.svg" alt="">Settings</a>
+                    <a href="{base}/admin/settings"><img src="{base}/icon/settings.svg" alt="">Settings</a>
                 </li>
             </ul>
         </div>
