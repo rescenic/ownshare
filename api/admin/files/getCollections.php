@@ -33,6 +33,14 @@ if(!isset($_GET["sortField"]) || !isset($_GET["sortDir"])) {
 $sortField = $_GET["sortField"];
 $sortDir = $_GET["sortDir"];
 
+if($sortDir != "ASC" && $sortDir != "DESC") {
+    $sortDir = "DESC";
+}
+
+if($sortField != "title" && $sortField != "totalFiles" && $sortField != "totalSize" && $sortField != "downloads" && $sortField != "uploaded_by" && $sortField != "uploaded_at" && $sortField != "save_until") {
+    $sortField = "title";
+}
+
 $stmt = $db->prepare("SELECT * from file_collections ORDER BY " . $sortField . " " . $sortDir);
 $stmt->execute();
 $collections = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);

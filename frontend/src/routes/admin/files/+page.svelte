@@ -148,7 +148,7 @@
         @apply inline h-4 float-end;
     }
 
-    tr th img.ASC {
+    tr th img.DESC {
         transform: rotate(180deg);
     }
 </style>
