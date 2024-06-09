@@ -96,9 +96,13 @@
           <tbody>
             {#each fileCollections as collection, i}
                 <tr class="bg-base-200">
-                    <td>{collection.title}</td>
+                    <td class="whitespace-nowrap">{collection.title}
+                        {#if collection.password != "" }
+                            <img class="h-4 inline ml-2" src="/icon/lock.svg" alt="">
+                        {/if}
+                    </td>
                     <td>{collection.totalFiles}</td>
-                    <td>{formatBytes(collection.totalSize)}</td>
+                    <td class="whitespace-nowrap">{formatBytes(collection.totalSize)}</td>
                     <td>{collection.downloads}/{collection.max_downloads}</td>
                     <td>
                         {#if collection.uploaded_by != null}

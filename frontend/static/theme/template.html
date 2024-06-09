@@ -10,7 +10,18 @@
         <div class="download-card">
 
             {{#if collection.error}}
-                {{ collection.error }}
+                {{#if collection.password_prompt }}
+                    <h1>This collection is locked!</h1>
+
+                    {{#if collection.wrong_password }}
+                        <span class="error">Wrong password!</span>
+                    {{/if}}
+
+                    <input class="input" placeholder="password" name="collection_password" type="password" autocomplete="off" value="">
+                    <button class="button" onclick="document.dispatchEvent(new Event('collectionPasswordEntered'))">Unlock</button>
+                {{else}}
+                    {{ collection.error }}
+                {{/if}}
             {{else}}
                 <header>
                     <h1>{{ collection.title }}</h1>

@@ -47,11 +47,15 @@ export async function setOption(name, value) {
     }
 }
 
-export async function fetchFileCollection(id) {
+export async function fetchFileCollection(id, password) {
     const cfg = await getConfig();
     const backendAddress = cfg.backendAddress;
 
-    let result = await fetch(backendAddress + "/getCollection.php?collectionId=" + id, {
+    if(password == null) {
+        password = "";
+    }
+
+    let result = await fetch(backendAddress + "/getCollection.php?collectionId=" + id + "&password=" + password, {
         method: "GET",
         credentials: "include",
     });
