@@ -21,6 +21,26 @@ if($collection == null || $collection == []) {
     exit();
 }
 
+if($collection["password"] != "") {
+
+    if(!isset($_GET["password"])) {
+        echo '{"error": "prompt_password"}';
+        exit();
+    }
+
+    $password = $_GET["password"];
+
+    if($password == "") {
+        echo '{"error": "prompt_password"}';
+        exit();
+    }
+
+    if($collection["password"] != $password) {
+        echo '{"error": "wrong_password"}';
+        exit();
+    }
+}
+
 if($collection["downloads"] >= $collection["max_downloads"]) {
     echo '{"error": "Max Downloads reached!"}';
     exit();

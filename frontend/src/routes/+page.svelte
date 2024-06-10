@@ -11,16 +11,27 @@
     
 
     onMount(async () => {
-
-        const cfg = await getConfig();
-        let backendAddress = cfg.backendAddress;
-
         let response = await fetch(base + "/theme/template.html");
         let templateHTML = await response.text();
         let template = Handlebars.compile(templateHTML);
 
         let collectionId = $page.url.searchParams.get("q");
-        collection = await fetchFileCollection(collectionId, backendAddress);
+        await fetchCollection(collectionId, "");
+        html = template({ collection });
+
+        document.addEventListener("collectionPasswordEntered", async (event) => {
+            let password = document.querySelector('[name="collection_password"]').value
+            await fetchCollection(collectionId, password);
+            html = template({ collection });
+            
+        });
+    });
+
+    async function fetchCollection(collectionId, collectionPassword) {
+        const cfg = await getConfig();
+        let backendAddress = cfg.backendAddress;
+
+        collection = await fetchFileCollection(collectionId, collectionPassword);
 
         if(!collection.error) {
             for(let i = 0; i < collection.files.length; i++) {
@@ -30,10 +41,13 @@
             }
 
             collection.zipUrl = backendAddress + collection.path + "/" + collection.collection_id + ".zip";
+        } else if(collection.error == "prompt_password") {
+            collection.password_prompt = "show";
+        } else if(collection.error == "wrong_password") {
+            collection.password_prompt = "show";
+            collection.wrong_password = "wrong";
         }
-
-        html = template({ collection });
-    });
+    }
 
     function formatBytes(bytes) {
         if (bytes === 0) return '0 Bytes';

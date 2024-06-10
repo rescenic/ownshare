@@ -25,12 +25,27 @@ if($user["role"] != "admin" && $user["role"] != "manager") {
     exit();
 }
 
-$stmt = $db->prepare("SELECT * from file_collections ORDER BY id DESC");
+if(!isset($_GET["sortField"]) || !isset($_GET["sortDir"])) {
+    echo '{"error": "sortField or sortDir not set!"}';
+    exit();
+}
+
+$sortField = $_GET["sortField"];
+$sortDir = $_GET["sortDir"];
+
+if($sortDir != "ASC" && $sortDir != "DESC") {
+    $sortDir = "DESC";
+}
+
+if($sortField != "title" && $sortField != "totalFiles" && $sortField != "totalSize" && $sortField != "downloads" && $sortField != "uploaded_by" && $sortField != "uploaded_at" && $sortField != "save_until") {
+    $sortField = "title";
+}
+
+$stmt = $db->prepare("SELECT * from file_collections ORDER BY " . $sortField . " " . $sortDir);
 $stmt->execute();
 $collections = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
 for($i = 0; $i < count($collections); $i++) {
-    $totalSize = 0;
     $collectionId = $collections[$i]["collection_id"];
 
     $stmt = $db->prepare("SELECT * FROM file_registry WHERE collection_id = ?");
